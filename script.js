@@ -1,6 +1,7 @@
 let mouseX = 0;
 let mouseY = 0;
-
+let oldX = 0;
+let oldY = 0;
 
 const canvas = document.getElementById("drawCanvas");
 const canvasCtx = canvas.getContext("2d");
@@ -44,76 +45,30 @@ function clearBigCircle() {
 
 function movement(e) {
     let pos = getMousePosition(canvas, e);
-    let abc = Math.pow(pos.x - bigX, 2) + Math.pow(pos.y - bigY, 2);
-
-    if (abc <= (bigR - smallR) * (bigR - smallR))
+    if (Math.sqrt(Math.pow(bigX - smallX, 2) + Math.pow(bigY - smallY, 2)) + smallR   < bigR)
     {
-        //clearCanvas();
-        //drawBigCircle()
-        let tempX = smallX;
-        let tempY = smallY;
-        let abc0 = Math.sqrt(Math.pow(pos.x - smallX, 2) + Math.pow(pos.y - smallY, 2));
-        let a =  (abc0 <= smallR + 5)
-        if (a)
-        {
-            if (pos.y >= smallY && pos.x >= smallX)  //Right Down
-            {
-                console.log("RD")
-                smallX = pos.x - smallR;
-                smallY = pos.y - smallR;
-                let radiusDistance = (Math.sqrt(Math.pow(smallX - bigX, 2) + Math.pow(smallY - bigY, 2)))
-                // console.log(radiusDistance + smallR);
-                // console.log(bigR);
-                let i = 0;
-                if (radiusDistance + smallR >= bigR)
-                {
-                    if (pos.y > bigY && pos.x < bigX) {
-                        console.log("HELLO")
-                        console.log(pos.x + ' ' +  pos.y);
-                        console.log(bigX + '' + bigY);
-                        console.log(bigR*bigR)
-                        var x7 = nerdamer.solveEquations(['3*x^2/y=2', 'z*x*y-1=35', '5*z^2+7=52']);
-                        console.log(x7.toString());
-                    }
-                    else {
-                        console.log("BYE")
-
-                    }
-                }
-
-            }
-            else if (pos.y >= smallY && pos.x <= smallX) //Left Down
-            {
-                console.log("LD")
-                smallX = pos.x + smallR;
-                smallY = pos.y - smallR;
-            }
-            else if (pos.y <= smallY && pos.x >= smallX) //Right Up
-            {
-                console.log("RU")
-                smallX = pos.x - smallR;
-                smallY = pos.y + smallR;
-            }
-            else//Left Up
-            {
-                console.log("LU")
-                smallX = pos.x + smallR;
-                smallY = pos.y + smallR;
-            }
-            clearCanvas();
-            drawBigCircle();
-            let radiusDistance = Math.sqrt(Math.pow(smallX - bigX, 2) + Math.pow(smallY - bigY, 2))
-            if (radiusDistance + smallR < bigR)
-                drawSmallCircle(smallX, smallY);
-            else
-            {
-                smallX = tempX;
-                smallY = tempY;
-                drawSmallCircle(smallX, smallY);
-            }
+        if (Math.sqrt(Math.pow(smallX - pos.x, 2) + Math.pow(smallY - pos.y, 2)) < smallR + 20) {
+            smallX += (pos.x - oldX);
+            smallY += (pos.y - oldY);
         }
-
+        console.log("wtf1")
     }
+    else if (Math.sqrt(Math.pow(bigX - (smallX + pos.x - oldX), 2) + Math.pow(bigY - (smallY + pos.y - oldY), 2)) + smallR  < bigR)
+    {
+        console.log("wtf2")
+        smallX += (pos.x - oldX);
+        smallY += (pos.y - oldY);
+    }
+
+
+    clearCanvas();
+    drawBigCircle();
+    drawSmallCircle(smallX, smallY);
+
+
+
+    oldX = pos.x;
+    oldY = pos.y;
 }
 
 function getMousePosition(canvas, evt) {
